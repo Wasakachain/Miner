@@ -1,0 +1,14 @@
+{
+  "name": "miner",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Wasakachain/Miner.git",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon index.js http://localhost:55555",
+    "start:node": "nodemon index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  }
+}
