@@ -1,7 +1,7 @@
 const { sha256 } = require('../utils/functions');
 
 class Block {
-    constructor(index, transactionsIncluded, difficulty, expectedReward, rewardAddress, blockDataHash) {
+    constructor({ index, transactionsIncluded, difficulty, expectedReward, rewardAddress, blockDataHash }) {
         this.index = index;
         this.transactionsIncluded = transactionsIncluded;
         this.difficulty = difficulty;
