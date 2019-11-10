@@ -5,7 +5,8 @@
   "repository": "git@github.com:Wasakachain/Miner.git",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon index.js http://localhost:5555",
+    "start": "node index.js",
+    "dev": "nodemon index.js http://localhost:5555",
     "start:node": "nodemon index.js"
   },
   "devDependencies": {

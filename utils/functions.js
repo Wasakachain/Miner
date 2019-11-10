@@ -3,7 +3,11 @@ const Url = require('url');
 const http = require('http');
 const querystring = require('querystring');
 
-function setHeaders(data) {
+/**
+ * Return formated headers
+ * @param {*} data to calculate data length
+ */
+function __setHeaders(data = null) {
     let header = {
         'Content-Type': 'application/x-www-form-urlencoded'
     }
@@ -13,18 +17,30 @@ function setHeaders(data) {
     return header;
 }
 
+/**
+ * Get the nodeURL given in command line parameters
+ * @returns {string}
+ */
 exports.getNode = function () {
     return process.argv[2];
 }
 
-exports.request = (url, method, data) => {
+/**
+ * Send a request
+ * @param {string} url 
+ * @param {string} method
+ * @param {data} data
+ *   
+ * @returns {Promise}
+ */
+exports.request = (url, method = 'GET', data) => {
     return new Promise((resolve, reject) => {
         let parsedUrl = Url.parse(url);
         const handler = parsedUrl.port == 443 ? https : http;
 
         let output = '';
         const req = handler.request({
-            host: `${parsedUrl.hostname}`, port: parsedUrl.port, path: parsedUrl.path, method, headers: setHeaders(data)
+            host: `${parsedUrl.hostname}`, port: parsedUrl.port, path: parsedUrl.path, method, headers: __setHeaders(data)
         }, (res) => {
             res.setEncoding('utf8');
             res.on('data', (chunk) => {
@@ -53,6 +69,10 @@ exports.request = (url, method, data) => {
     })
 };
 
+/**
+ * Create sha256 hash from given data
+ * @param {string} data data to hash
+ */
 exports.sha256 = function (data) {
     return crypto.createHash('sha256').update(data).digest('hex')
 }

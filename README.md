@@ -1,2 +1,7 @@
-# Miner
-Miner Project in NodeJs
+# Wasakachain Miner
+
+To run the miner
+
+```bash
+$npm start <nodeURL>
+```
