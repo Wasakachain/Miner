@@ -1,4 +1,17 @@
 const crypto = require('crypto');
+const Url = require('url');
+const http = require('http');
+const querystring = require('querystring');
+
+function setHeaders(data) {
+    let header = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    if (data) {
+        header['Content-Length'] = Buffer.byteLength(querystring.stringify(data));
+    }
+    return header;
+}
 
 exports.getNode = function () {
     return process.argv[2];

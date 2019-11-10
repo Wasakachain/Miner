@@ -8,13 +8,14 @@ if (!node) {
     process.exit(1);
 }
 
-const miner = new Miner(node, '0'.repeat(64));
+const miner = new Miner(node);
 
 (async () => {
     while (true) {
-        miner.requestBlock();
+        await miner.requestBlock();
         if (miner.blockCandidate) {
             miner.mineBlock();
+            // console.log(miner.minedBlock)
             miner.submitBlock();
         }
     }
