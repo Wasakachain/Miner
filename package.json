@@ -9,6 +9,12 @@
     "dev": "nodemon index.js http://localhost:5555",
     "start:node": "nodemon index.js"
   },
+  "dependencies": {
+    "bip32": "^2.0.4",
+    "bip39": "^3.0.2",
+    "ethers": "^4.0.39",
+    "ripemd160": "^2.0.2"
+  },
   "devDependencies": {
     "nodemon": "^1.19.4"
   }

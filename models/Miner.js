@@ -6,9 +6,9 @@ class Miner {
      * Miner representation class
      * @param {string} node node url
      */
-    constructor(node) {
+    constructor(node, address) {
         this.node = node;
-        this.address = 0x321B66D4f1F1A1E879c773228Cd8DF995Fc1dBca
+        this.address = address;
         this.blockCandidate = null;
         this.minedBlock = null;
     }
