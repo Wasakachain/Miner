@@ -27,9 +27,10 @@ class Miner {
      * Mine the block candidate
      */
     mineBlock() {
+        console.log('\x1b[43m%s\x1b[0m', `Mining block candidate #${this.blockCandidate.index}`)
         this.minedBlock = this.blockCandidate.mine();
         this.blockCandidate = null;
-        console.log('Block mined!');
+        console.log('\x1b[36m%s\x1b[0m', 'Block mined!');
     }
 
     /**
@@ -39,7 +40,7 @@ class Miner {
         try {
             const res = await request(`${this.node}/mining/submit-mined-block`, 'POST', this.minedBlock);
             this.minedBlock = null;
-            console.log(res.data.message);
+            console.log('\x1b[42m%s\x1b[0m', res.data.message);
         } catch (error) {
             console.log(error)
         }
