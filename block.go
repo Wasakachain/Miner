@@ -72,7 +72,7 @@ func (b *Block) SubmitBlock(host string) {
 }
 
 func requestBlock(host string) (Block, error) {
-	resp, err := http.Get(fmt.Sprintf("%s/mining/get-mining-job/0x13483183184831834831913321231234321214321431431431432143214214", host))
+	resp, err := http.Get(fmt.Sprintf("%s/mining/get-mining-job/%s", host, account["address"]))
 
 	if err != nil {
 		return Block{}, err

@@ -4,6 +4,7 @@ const bip32 = require('bip32');
 const elliptic = require('elliptic');
 const secp256k1 = new elliptic.ec('secp256k1');
 const ripemd160 = require('ripemd160');
+const fs = require('fs');
 
 const purpose = "m/44";
 // our picked unused number for wasakachain coin.
@@ -13,6 +14,8 @@ const account = "/0'"
 const change = "/0"
 
 const mainPath = purpose + coinType + account + change;
+
+fs.writeFileSync('./account.json', JSON.stringify(loadAccount(generateMnemonic())), { encoding: 'UTF8' });
 
 function toHexString(value) {
     let hexString = value.toString(16);
@@ -59,9 +62,3 @@ function loadAccount(mnemonic, count = 1) {
 }
 
 
-if (fs.existsSync('./account.json')) {
-    account = JSON.parse(fs.readFileSync('./account.json', { encoding: 'UTF8' }));
-} else {
-    account = loadAccount(generateMnemonic());
-    fs.writeFileSync('./account.json', JSON.stringify(account), { encoding: 'UTF8' });
-}
