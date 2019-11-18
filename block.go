@@ -31,7 +31,7 @@ func (b *Block) addNonce() {
 	mutex.Unlock()
 }
 
-func (b *Block) mine(channel chan bool) {
+func (b *Block) mine() {
 	for !b.validProof() {
 		b.addNonce()
 	}

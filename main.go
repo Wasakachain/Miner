@@ -33,8 +33,9 @@ func main() {
 	fmt.Printf("Using %d CPU\n", *cpu)
 
 	for {
-		channel := make(chan bool)
+		// channel := make(chan bool)
 		var wg sync.WaitGroup
+		// var once sync.Once
 		wg.Add(10)
 
 		block, err := requestBlock(*host)
@@ -49,7 +50,8 @@ func main() {
 		for i := 0; i < 10; i++ {
 			go func() {
 				defer wg.Done()
-				block.mine(channel)
+				block.mine()
+				// once.Do(func() { block.SubmitBlock(*host) })
 			}()
 		}
 
