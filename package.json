@@ -1,0 +1,15 @@
+{
+  "name": "miner",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Wasakachain/Miner.git",
+  "license": "MIT",
+  "dependencies": {
+    "bip32": "^2.0.4",
+    "bip39": "^3.0.2",
+    "elliptic": "^6.5.1",
+    "ethers": "^4.0.39",
+    "ripemd160": "^2.0.2",
+    "secp256k1": "^3.7.1"
+  }
+}
