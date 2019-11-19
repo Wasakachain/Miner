@@ -73,8 +73,14 @@ func SubmitBlock(b Block, host string) {
 
 	var result map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&result)
-	for _, message := range result {
-		fmt.Printf("Result: %v\n", message)
+	for key, message := range result {
+		var color string
+		if key == "errorMsg" {
+			color = "\033[41m"
+		} else {
+			color = "\033[42m"
+		}
+		fmt.Printf("%vResult: %v\033[0m\n", color, message)
 	}
 }
 

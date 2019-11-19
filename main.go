@@ -43,7 +43,7 @@ func main() {
 			panic(err.Error())
 		}
 
-		fmt.Printf("Mining block #%d\n", block.index)
+		fmt.Printf("\033[44mMining block #%d\033[0m\n", block.index)
 
 		mutex := new(sync.Mutex)
 		once := new(sync.Once)
