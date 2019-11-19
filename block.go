@@ -17,24 +17,28 @@ type Block struct {
 	index                uint32
 	transactionsIncluded uint32
 	difficulty           uint32
-	expectedReward       uint64
+	expectedReward       string
 	rewardAddress        string
 	blockDataHash        string
 	dateCreated          string
 	nonce                uint32
+	mined                bool
 }
 
-func (b *Block) addNonce() {
-	var mutex sync.Mutex
-	mutex.Lock()
-	b.nonce++
-	mutex.Unlock()
-}
-
-func (b *Block) mine() {
-	for !b.validProof() {
-		b.addNonce()
+func (b *Block) mine(host string, mutex *sync.Mutex, once *sync.Once) {
+	for !b.mined {
+		if block, ok := validProof(*b); ok {
+			once.Do(func() {
+				SubmitBlock(block, host)
+			})
+			return
+		}
+		mutex.Lock()
+		b.nonce++
+		b.dateCreated = time.Now().UTC().Format(time.RFC3339)
+		mutex.Unlock()
 	}
+	b.mined = true
 }
 
 //Hash returns a sha256 hash string of the block data
@@ -44,6 +48,7 @@ func (b *Block) Hash() string {
 		"dateCreated":   b.dateCreated,
 		"nonce":         b.nonce,
 	})
+
 	hasher := sha256.New()
 	hasher.Write(json)
 
@@ -51,12 +56,12 @@ func (b *Block) Hash() string {
 
 }
 
-func (b *Block) validProof() bool {
-	return strings.Repeat("0", int(b.difficulty)) == string(b.Hash()[:b.difficulty])
+func validProof(b Block) (Block, bool) {
+	return b, strings.Repeat("0", int(b.difficulty)) == string(b.Hash()[:b.difficulty])
 }
 
 //SubmitBlock send the mined block to the node
-func (b *Block) SubmitBlock(host string) {
+func SubmitBlock(b Block, host string) {
 	data, _ := json.Marshal(map[string]interface{}{
 		"blockDataHash": b.blockDataHash,
 		"dateCreated":   b.dateCreated,
@@ -68,7 +73,9 @@ func (b *Block) SubmitBlock(host string) {
 
 	var result map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&result)
-	fmt.Printf("%v\n", result["message"])
+	for _, message := range result {
+		fmt.Printf("Result: %v\n", message)
+	}
 }
 
 func requestBlock(host string) (Block, error) {
@@ -84,7 +91,7 @@ func requestBlock(host string) (Block, error) {
 		index:                uint32(result["index"].(float64)),
 		transactionsIncluded: uint32(result["transactionsIncluded"].(float64)),
 		difficulty:           uint32(result["difficulty"].(float64)),
-		expectedReward:       uint64(result["expectedReward"].(float64)),
+		expectedReward:       result["expectedReward"].(string),
 		rewardAddress:        result["rewardAddress"].(string),
 		blockDataHash:        result["blockDataHash"].(string),
 		dateCreated:          time.Now().UTC().Format(time.RFC3339),

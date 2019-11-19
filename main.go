@@ -33,12 +33,10 @@ func main() {
 	fmt.Printf("Using %d CPU\n", *cpu)
 
 	for {
-		// channel := make(chan bool)
 		var wg sync.WaitGroup
-		// var once sync.Once
 		wg.Add(10)
 
-		block, err := requestBlock(*host)
+		block, err := requestBlock(*host) // request block candidate
 
 		if err != nil {
 			println("Error on mining job request")
@@ -47,16 +45,17 @@ func main() {
 
 		fmt.Printf("Mining block #%d\n", block.index)
 
+		mutex := new(sync.Mutex)
+		once := new(sync.Once)
+
 		for i := 0; i < 10; i++ {
 			go func() {
 				defer wg.Done()
-				block.mine()
-				// once.Do(func() { block.SubmitBlock(*host) })
+				block.mine(*host, mutex, once)
 			}()
 		}
 
 		wg.Wait()
-		block.SubmitBlock(*host)
 	}
 }
 
