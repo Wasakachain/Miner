@@ -37,7 +37,6 @@ func main() {
 		wg.Add(10)
 
 		block, err := requestBlock(*host) // request block candidate
-
 		if err != nil {
 			println("Error on mining job request")
 			panic(err.Error())
