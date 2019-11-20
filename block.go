@@ -68,8 +68,13 @@ func SubmitBlock(b Block, host string) {
 		"blockHash":     b.Hash(),
 		"nonce":         b.nonce,
 	})
-	resp, _ := http.Post(host+"/mining/submit-mined-block", "application/json",
+	resp, err := http.Post(host+"/mining/submit-mined-block", "application/json",
 		bytes.NewBuffer(data))
+
+	if err != nil {
+		println(err.Error())
+		return
+	}
 
 	var result map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&result)
