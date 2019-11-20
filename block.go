@@ -28,6 +28,7 @@ type Block struct {
 func (b *Block) mine(host string, mutex *sync.Mutex, once *sync.Once) {
 	for !b.mined {
 		if block, ok := validProof(*b); ok {
+			b.mined = true
 			once.Do(func() {
 				SubmitBlock(block, host)
 			})
@@ -38,7 +39,6 @@ func (b *Block) mine(host string, mutex *sync.Mutex, once *sync.Once) {
 		b.dateCreated = time.Now().UTC().Format(time.RFC3339)
 		mutex.Unlock()
 	}
-	b.mined = true
 }
 
 //Hash returns a sha256 hash string of the block data
