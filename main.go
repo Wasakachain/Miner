@@ -17,20 +17,32 @@ var (
 )
 
 func main() {
-	host := flag.String("h", "http://localhost:5555", "Node url")
-	cpu := flag.Int("cpu", runtime.NumCPU(), "Cpu count")
+	host := flag.String("host", "http://localhost:5555", "--host <url>") // host flag
+	cpu := flag.Int("cpu", runtime.NumCPU(), "--cpu <max cpu count>")    // cpu flag
 
+	help := flag.Bool("help", false, "--help Display help")
+
+	// parse flags
 	flag.Parse()
-	checkAccountFile()
 
+	if *help {
+		flag.PrintDefaults()
+		return
+	}
+	// Create account file if does not exists
+	checkAccountFile()
+	// Read account file and save the data in account map
 	loadAccount()
 
+	//Set the max cpu count
 	if *cpu > runtime.NumCPU() {
 		*cpu = runtime.NumCPU()
 	}
 
 	runtime.GOMAXPROCS(*cpu)
+
 	fmt.Printf("Using %d CPU\n", *cpu)
+	fmt.Printf("Mining on node: %v\n", *host)
 
 	for {
 		var wg sync.WaitGroup
