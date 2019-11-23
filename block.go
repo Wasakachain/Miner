@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 	"sync"
 	"time"
@@ -21,7 +22,7 @@ type Block struct {
 	rewardAddress        string
 	blockDataHash        string
 	dateCreated          string
-	nonce                uint32
+	nonce                uint64
 	mined                bool
 }
 
@@ -46,7 +47,7 @@ func (b *Block) Hash() string {
 	json, _ := json.Marshal(map[string]interface{}{
 		"blockDataHash": b.blockDataHash,
 		"dateCreated":   b.dateCreated,
-		"nonce":         b.nonce,
+		"nonce":         strconv.Itoa(int(b.nonce)),
 	})
 
 	hasher := sha256.New()
@@ -66,7 +67,7 @@ func SubmitBlock(b Block, host string) {
 		"blockDataHash": b.blockDataHash,
 		"dateCreated":   b.dateCreated,
 		"blockHash":     b.Hash(),
-		"nonce":         b.nonce,
+		"nonce":         strconv.Itoa(int(b.nonce)),
 	})
 	resp, err := http.Post(host+"/mining/submit-mined-block", "application/json",
 		bytes.NewBuffer(data))
